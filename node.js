@@ -27,11 +27,14 @@ const config = {
     platforms = this.physics.add.staticGroup();
     platforms.create(400, 300, 'spike');
 
-    player = this.physics.add.sprite();
+    player = this.physics.add.sprite(100, 450, 'player');
     player.setCollideWorldBounds(true);
 
     this.anims.create({
-      key: 'Left',
+      key: 'up',
+      frames: this.anims.generateFrameNumbers('player', { start: 0, end: 1 }),
+      frameRate: 10,
+      repeat: -1
     })
 
     controls = this.input.keyboard.createCursorKeys()
