@@ -1,7 +1,8 @@
 const config = {
     type: Phaser.AUTO,    // Phaser will use WebGL if available, otherwise Canvas
-    width: 800,           // Game canvas width
-    height: 600,          // Game canvas height
+    width: 800,
+    height: 600,
+    backgroundColor: '#ffffff',
     physics: {
         default: 'arcade',
         arcade: {
@@ -18,17 +19,23 @@ const config = {
   // Load assets
   function preload() {
     this.load.image('spike', 'assets/spike.jpeg');
-    this.load.image('player', 'assets/player.png');
+    this.load.image('ground', 'assets/ground.png')
+    this.load.spritesheet('player', 'assets/player.png', {
+      frameWidth: 49,    
+      frameHeight: 49,
+    })
   };
   
   // Create game objects
   function create() {
 
     platforms = this.physics.add.staticGroup();
-    platforms.create(400, 300, 'spike');
+    platforms.create(400, 560, 'spike');
+    platforms.create(400, 600, 'ground').setScale(2).refreshBody();;
 
     player = this.physics.add.sprite(100, 450, 'player');
     player.setCollideWorldBounds(true);
+    this.physics.add.collider(player, platforms)
 
     this.anims.create({
       key: 'up',
@@ -37,13 +44,44 @@ const config = {
       repeat: -1
     })
 
-    controls = this.input.keyboard.createCursorKeys()
+    this.anims.create({
+      key: 'right',
+      frames: this.anims.generateFrameNumbers('player', { start: 2, end: 3 }),
+      frameRate: 5,
+      repeat: -1
+    })
 
-    //if(controls.left.isUp)()
+    this.anims.create({
+      key: 'stand',
+      frames: [{key: 'player', frame: 1}],
+      frameRate: 20
+    })
+
+    controls = this.input.keyboard.createCursorKeys()
   };
   
   // Update game loop
   function update() {
+    
+    if(controls.right.isDown) {
+      player.setVelocityX(100);
+      player.anims.play('right', true)
+    }
+    else if(controls.left.isDown) {
+      player.setVelocityX(-100);
+      player.anims.play('right', true)
+    }
+    else {
+      player.setVelocityX(0);
+      player.anims.play('stand', true)
+    }
+    if (controls.up.isDown && player.body.touching.down) {
+      player.setVelocityY(-200);
+      
+    }
+    if(!player.body.touching.down) {
+      player.anims.play('up', true);
+    }
     
   };
   
