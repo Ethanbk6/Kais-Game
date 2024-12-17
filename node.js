@@ -17,18 +17,30 @@ const config = {
   
   // Load assets
   function preload() {
-    this.load.image()
-  }
+    this.load.image('spike', 'assets/spike.jpeg');
+    this.load.image('player', 'assets/player.png');
+  };
   
   // Create game objects
   function create() {
-    this.add.image()
-    platforms = this.physics.add.staticGroup()
-    platforms.create()
-  }
+
+    platforms = this.physics.add.staticGroup();
+    platforms.create(400, 300, 'spike');
+
+    player = this.physics.add.sprite();
+    player.setCollideWorldBounds(true);
+
+    this.anims.create({
+      key: 'Left',
+    })
+
+    controls = this.input.keyboard.createCursorKeys()
+
+    //if(controls.left.isUp)()
+  };
   
   // Update game loop
   function update() {
     
-  }
+  };
   
